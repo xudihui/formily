@@ -314,6 +314,9 @@ describe('clone and compare', () => {
           $$typeof: true,
           _owner: true,
         },
+        dd: {
+          _isBigNumber: true,
+        },
       })
     ).toEqual({
       aa: {
@@ -325,6 +328,9 @@ describe('clone and compare', () => {
       cc: {
         $$typeof: true,
         _owner: true,
+      },
+      dd: {
+        _isBigNumber: true,
       },
     })
     expect(
@@ -376,6 +382,13 @@ describe('clone and compare', () => {
     expect(shallowClone(/\d+/)).toEqual(/\d+/)
     expect(shallowClone({ _isAMomentObject: true })).toEqual({
       _isAMomentObject: true,
+    })
+    expect(
+      shallowClone({
+        _isBigNumber: true,
+      })
+    ).toEqual({
+      _isBigNumber: true,
     })
     expect(
       shallowClone({
@@ -714,6 +727,36 @@ describe('merge', () => {
         bb: 321,
       },
     })
+    expect(
+      merge(
+        {
+          react: {
+            _isBigNumber: true,
+            c: [1, 234567890123],
+            e: 0,
+            s: 1,
+          },
+        },
+        {
+          react: {
+            _isBigNumber: true,
+            c: [2, 345678901234],
+            e: 1,
+            s: 0,
+          },
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      react: {
+        _isBigNumber: true,
+        c: [2, 345678901234],
+        e: 1,
+        s: 0,
+      },
+    })
     const toJSObj = {
       toJS: () => {},
       bb: 321,
@@ -950,6 +993,10 @@ test('defaults', () => {
         ee: {
           toJS,
         },
+        ff: {
+          _isBigNumber: true,
+          toJSON,
+        },
       },
       {
         aa: { value: 111 },
@@ -958,6 +1005,13 @@ test('defaults', () => {
         dd: { value: 444 },
         ee: { value: 555 },
         mm: { value: 123 },
+        ff: {
+          value: {
+            c: [1, 234567890123],
+            e: 0,
+            s: 1,
+          },
+        },
       }
     )
   ).toEqual({
@@ -967,6 +1021,13 @@ test('defaults', () => {
     dd: { value: 444 },
     ee: { value: 555 },
     mm: { value: 123 },
+    ff: {
+      value: {
+        c: [1, 234567890123],
+        e: 0,
+        s: 1,
+      },
+    },
   })
 
   expect(defaults([1, 2, 3], [0, undefined])).toEqual([0, 2, 3])
