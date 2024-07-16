@@ -376,7 +376,11 @@ export const FormBaseItem = defineComponent<FormItemProps>({
 
       const renderExtra =
         extra &&
-        h('div', { class: `${prefixCls}-extra` }, { default: () => [extra] })
+        h(
+          'div',
+          { class: `${prefixCls}-extra` },
+          { default: () => [resolveComponent(extra)] }
+        )
       const renderContent = h(
         'div',
         {
