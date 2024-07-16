@@ -4,6 +4,7 @@ import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
+import { isElement } from 'react-is'
 import { Tooltip, Popover, ConfigProvider } from 'antd'
 import {
   QuestionCircleOutlined,
@@ -18,7 +19,7 @@ export interface IFormItemProps {
   prefixCls?: string
   label?: React.ReactNode
   colon?: boolean
-  tooltip?: React.ReactNode
+  tooltip?: React.ReactNode | React.ComponentProps<typeof Tooltip>
   tooltipIcon?: React.ReactNode
   layout?: 'vertical' | 'horizontal' | 'inline'
   tooltipLayout?: 'icon' | 'text'
@@ -53,6 +54,12 @@ export interface IFormItemProps {
 
 type ComposeFormItem = React.FC<React.PropsWithChildren<IFormItemProps>> & {
   BaseItem?: React.FC<React.PropsWithChildren<IFormItemProps>>
+}
+
+const isTooltipProps = (
+  tooltip: React.ReactNode | React.ComponentProps<typeof Tooltip>
+): tooltip is React.ComponentProps<typeof Tooltip> => {
+  return !isElement(tooltip)
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
@@ -219,16 +226,22 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
 
   const gridStyles: React.CSSProperties = {}
 
+  const tooltipNode = isTooltipProps(tooltip) ? (
+    <Tooltip {...tooltip}></Tooltip>
+  ) : (
+    tooltip
+  )
+
   const getOverflowTooltip = () => {
     if (overflow) {
       return (
         <div>
           <div>{label}</div>
-          <div>{tooltip}</div>
+          <div>{tooltipNode}</div>
         </div>
       )
     }
-    return tooltip
+    return tooltipNode
   }
 
   const renderLabelText = () => {
@@ -266,7 +279,11 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
     if (tooltip && tooltipLayout === 'icon' && !overflow) {
       return (
         <span className={`${prefixCls}-label-tooltip-icon`}>
-          <Tooltip placement="top" align={{ offset: [0, 2] }} title={tooltip}>
+          <Tooltip
+            placement="top"
+            align={{ offset: [0, 2] }}
+            title={tooltipNode}
+          >
             {tooltipIcon}
           </Tooltip>
         </span>

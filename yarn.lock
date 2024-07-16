@@ -3373,6 +3373,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-is@^18.3.0":
+  version "18.3.0"
+  resolved "https://registry.yarnpkg.com/@types/react-is/-/react-is-18.3.0.tgz#07008aecacf9c788f68e72eecca43701d7e6eefb"
+  integrity sha512-KZJpHUkAdzyKj/kUHJDc6N7KyidftICufJfOFpiG6haL/BDQNQt5i4n1XDUL/nDZAtGLHDSWRYpLzKTAKSvX6w==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-router-config@5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@types/react-router-config/-/react-router-config-5.0.2.tgz#4d3b52e71ed363a1976a12321e67b09a99ad6d10"
